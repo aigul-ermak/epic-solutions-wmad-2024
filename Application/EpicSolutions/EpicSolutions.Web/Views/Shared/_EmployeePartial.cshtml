@@ -1,0 +1,45 @@
+﻿@model EpicSolutions.Model.EmployeeDTO
+
+
+<div>
+    <h5 class="ms-3">Employee</h5>  
+    <div class="row m-3">
+        <p class="fs-5 m-0 p-0">@Model.FullName</p>
+        <p class="m-0 p-0">Position: <b>@Model.Position</b></p>
+    </div>
+
+    @if (Model.Id != 1)
+    {
+        <div class="row m-3">
+            <p class="fs-5 m-0 p-0">@Model.Department</p>
+        <p class="m-0 p-0">Department</p>       
+    </div>
+    }
+
+    <div class="row m-3">
+        <p class="fs-5 m-0 p-0">@Model.DateHired?.ToString("yyyy-MM-dd")</p>
+        <p class="m-0 p-0">Date Hired</p>        
+    </div>
+
+
+    <div class="row m-3">       
+        <div class="col-sm-2">          
+            <a href="mailto:@Model.Email" title="Send email to @Model.Email">
+                <i class="fa-solid fa-envelope"></i>
+            </a>
+        </div>
+        <div class="col-sm-10">
+            <span>@Model.Email</span>
+        </div>
+    </div>
+
+    <div class="row m-3">
+        <div class="col-sm-2">
+            <i class="fa-solid fa-phone"></i>            
+        </div>
+        <div class="col-sm-10">
+            <span>@Model.WorkPhone</span>
+        </div>
+    </div>
+ 
+</div>

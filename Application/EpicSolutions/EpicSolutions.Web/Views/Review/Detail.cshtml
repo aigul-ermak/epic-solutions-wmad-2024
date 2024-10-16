@@ -1,0 +1,49 @@
+﻿@model EpicSolutions.Model.DTO.ReviewEmployeeDTO ;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+    ViewBag.Title = "Review Details";
+}
+
+
+
+@if (!String.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+else
+{
+    <div class="container mt-4">
+        <h2 class="mb-3 text-center">Review Details</h2>
+        <div class="card">
+            <div class="card-header">
+                Detailed Information
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Year:</dt>
+                    <dd class="col-sm-9">@Model.Year</dd>
+
+                    <dt class="col-sm-3">Quarter:</dt>
+                    <dd class="col-sm-9">@Model.QuarterName</dd>
+
+                    <dt class="col-sm-3">Completion Date:</dt>
+                    <dd class="col-sm-9">@Model.CompletionDate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-3">Supervisor Name:</dt>
+                    <dd class="col-sm-9">@Model.SupervisorFullName</dd>
+
+                    <dt class="col-sm-3">Rating:</dt>
+                    <dd class="col-sm-9">@Model.RatingName</dd>
+
+                    <dt class="col-sm-3">Comment:</dt>
+                    <dd class="col-sm-9 dynamic-comment">@Model.Comment</dd>
+                    
+                </dl>
+            </div>
+            <div class="card-footer text-muted">
+               
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,25 @@
+﻿
+@model EpicSolutions.Model.Department;
+
+<div>
+    <h4>Department Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name):</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description):</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.InvocationDate):</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.InvocationDate)</dd>
+    </dl>
+
+    <div class="form-group row">
+        <div class="col-sm-9 offset-sm-3">
+            <a href="@Url.Action("Personal", "Department", new { id = Model.Id })" class="btn btn-primary">Edit Department</a>
+            <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+        </div>
+    </div>
+
+</div>

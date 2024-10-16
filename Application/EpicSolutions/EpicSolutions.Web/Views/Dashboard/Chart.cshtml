@@ -1,0 +1,119 @@
+﻿@model EpicSolutions.Web.Models.ChartVM
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Chart";
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("Role");
+    bool isSupervisor = (userRole == "HR Employee" || userRole == "Regular Supervisor");
+}
+
+<h1>Expenses Chart</h1>
+
+<div>
+    <h4>Chart</h4>
+    <hr />
+
+    <div class="row">
+        <div class="col-6">
+            <canvas id="poExpensesChart"></canvas>
+        </div>
+        <div class="col-3 align-content-center">
+            <div class="d-flex flex-column justify-content-between align-items-center gap-3">
+                 @if (@Model.PerformanceCount > 0)
+                    {
+                        <div style="width: 150px; height: 150px; border-radius: 50%; background-color: #A4CEDC; display: flex; align-items: center; justify-content: center;">
+                        <label class="fs-1 font-monospace text-warning">@Model.PerformanceCount</label>
+                        </div>
+                        <label class="fs-3 font-monospace">Unread Performances</label>
+                    }
+
+                <div style="width: 150px; height: 150px; border-radius: 50%; background-color: #A4CEDC; display: flex; align-items: center; justify-content: center;">
+                    <label class="fs-1 font-monospace text-danger">5</label>
+                </div>
+                <label class="fs-3 font-monospace">Performances</label>
+
+            </div>
+        </div>
+        @if (isSupervisor)
+        {
+            <div class="col-3 align-content-center">
+                <div class="d-flex flex-column justify-content-between align-items-center gap-3">
+                    @if (@Model.EmployeeCount > 0)
+                    {
+                        <div style="width: 150px; height: 150px; border-radius: 50%; background-color: #A4CEDC; display: flex; align-items: center; justify-content: center;">
+                            <label class="fs-1 font-monospace text-warning">@Model.EmployeeCount</label>
+                        </div>
+                        <label class="fs-3 font-monospace">Employee Supervises</label>
+                    }
+                    @if (@Model.ReviewCount > 0)
+                    {
+                        <div style="width: 150px; height: 150px; border-radius: 50%; background-color: #A4CEDC; display: flex; align-items: center; justify-content: center;">
+                            <label class="fs-1 font-monospace text-danger">@Model.ReviewCount</label>
+                        </div>
+                        <label class="fs-3 font-monospace">Pending Review</label>
+                    }
+
+                </div>
+            </div>
+        }
+        
+
+    </div>
+
+
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+        var ctx = document.getElementById('poExpensesChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.Expenses.Keys)),
+                datasets: [{
+                    label: 'PO Expenses',
+                    data: @Html.Raw(Json.Serialize(Model.Expenses.Values)),
+                    backgroundColor: 'rgba(100, 200, 200, 0.5)',
+                    borderColor: 'rgba(100, 200, 200, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Expenses'
+                        },
+                        ticks: {
+                            callback: function (value, index, values) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Monthly PO Expenses'
+                    }
+                }
+            }
+        });
+
+    </script>
+}

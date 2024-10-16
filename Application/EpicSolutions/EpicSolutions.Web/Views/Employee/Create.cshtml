@@ -1,0 +1,583 @@
+﻿﻿
+@model EpicSolutions.Web.Models.EmployeeAddViewVM;
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="main-content">
+
+    <h4 class="text-center mt-3"> Create Employee</h4>
+
+    <div class="justify-content-center mt-3 mb-5">
+        <form asp-action="Create">
+            @*
+            @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+            {
+            <div class="alert alert-success" role="alert">
+            @ViewBag.SuccessMessage
+            </div>
+            } *@
+
+
+            <div class="row justify-content-center" id="errorMessageRow">
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="col-6">
+                        <div class="alert alert-danger " role="alert" id="errorMessageContainer">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+            <div class="row justify-content-center m-3">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="col-12 col-md-6 col-lg-4 border border-dark rounded mt-3 mt-md-0 mb-3 mb-md-0 pb-3 pb-md-0">
+
+                    <div class="form-group mt-2">
+                        <label asp-for="Employee.JobAssignmentId" class="control-label"></label>
+                        <select asp-for="Employee.JobAssignmentId" asp-items="Model.JobAssignments" class="form-select" id="jobAssignment">
+                            <option disabled selected>--- Select Position ---</option>
+                        </select>
+                        <span id="jobAssignmentError" class="text-danger"></span>
+                        <span asp-validation-for="Employee.JobAssignmentId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label asp-for="Employee.RoleId" class="control-label"></label>
+                        @if (Model.Employee.JobAssignmentId == 1)
+                        {
+                            <select asp-for="Employee.RoleId" asp-items="Model.Roles" class="form-select" id="role" disabled>
+                                <option disabled selected>--- Select Role ---</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select asp-for="Employee.RoleId" asp-items="Model.Roles" class="form-select" id="role">
+                                <option disabled selected>--- Select Role ---</option>
+                            </select>
+                        }
+                        <div id="roleMessage" class="text-info mt-2"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.DepartmentId" class="control-label"></label>
+                        @if (Model.Employee.JobAssignmentId == 1)
+                        {
+                            <select asp-for="Employee.DepartmentId" asp-items="Model.Departments" class="form-control" id="department" disabled>
+                                <option value="">-- Select Department --</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select asp-for="Employee.DepartmentId" asp-items="Model.Departments" class="form-control" id="department">
+                                <option value="">-- Select Department --</option>
+                            </select>
+                        }
+                        <div id="departmentMessage" class="text-info mt-2"></div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="Employee.SupervisorEmployeeId" class="control-label"></label>
+                        @if (Model.Employee.JobAssignmentId == 1)
+                        {
+                            <select asp-for="Employee.SupervisorEmployeeId" asp-items="Model.SupervisorsEmployees" class="form-control" id="supervisor" disabled>
+                                <option value="">-- Select Supervisor --</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select asp-for="Employee.SupervisorEmployeeId" asp-items="Model.SupervisorsEmployees" class="form-control" id="supervisor">
+                                <option value="">-- Select Supervisor --</option>
+                            </select>
+                        }
+                        <div id="supervisorMessage" class="text-info mt-2"></div>
+                    </div>
+                   @*  <div class="form-group">
+                        <label asp-for="Employee.StatusId" class="control-label"></label>
+                        <input asp-for="Employee.StatusId" class="form-control" />
+                        <span asp-validation-for="Employee.StatusId" class="text-danger"></span>
+                    </div> *@
+                    <div class="form-group">
+                        <label asp-for="Employee.StatusId" class="control-label">Status:</label>
+                        <select asp-for="Employee.StatusId" asp-items="Model.Statuses" class="form-control">
+                            <option value="">-- Select Status --</option>
+                        </select>
+                        <span asp-validation-for="Employee.StatusId" class="text-danger"></span>
+                    </div>
+                  
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4 mt-3 mt-md-0 mb-3 mb-md-0">
+
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="form-group">
+                                <label asp-for="Employee.FirstName" class="control-label"></label>
+                                <input asp-for="Employee.FirstName" class="form-control" />
+                                <span asp-validation-for="Employee.FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label asp-for="Employee.MiddleInitial" class="control-label"></label>
+                                <input asp-for="Employee.MiddleInitial" class="form-control" />
+                                <span asp-validation-for="Employee.MiddleInitial" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.DOB" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-calendar-days"></i>
+                            </span>
+                            <input asp-for="Employee.DOB" class="form-control" type="date" />
+                        </div>
+                        <span asp-validation-for="Employee.DOB" class="text-danger"></span>
+                    </div>
+
+                    @*  <div class="form-group">
+                    <label asp-for="Employee.DOB" class="control-label"></label>
+                    <input asp-for="Employee.DOB" class="form-control" />
+                    <span asp-validation-for="Employee.DOB" class="text-danger"></span>
+                    </div> *@
+
+                    <div class="form-group">
+                        <label asp-for="Employee.StreetAddress" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </span>
+                            <input asp-for="Employee.StreetAddress" class="form-control" type="text" />
+                        </div>
+                        <span asp-validation-for="Employee.StreetAddress" class="text-danger"></span>
+                    </div>
+                    @* <div class="form-group">
+                    <label asp-for="Employee.StreetAddress" class="control-label"></label>
+                    <input asp-for="Employee.StreetAddress" class="form-control" />
+                    <span asp-validation-for="Employee.StreetAddress" class="text-danger"></span>
+                    </div> *@
+
+                    <div class="row">
+                        <div class="col-6">
+
+                            <div class="form-group">
+                                <label asp-for="Employee.SeniorityDate" class="control-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-regular fa-calendar-days"></i>
+                                    </span>
+                                    <input asp-for="Employee.SeniorityDate" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Employee.SeniorityDate" class="text-danger"></span>
+                            </div>
+
+
+                            @*   <div class="form-group">
+                            <label asp-for="Employee.SeniorityDate" class="control-label"></label>
+                            <input asp-for="Employee.SeniorityDate" class="form-control" />
+                            <span asp-validation-for="Employee.SeniorityDate" class="text-danger"></span>
+                            </div> *@
+                        </div>
+                        <div class="col-6">
+
+                            <div class="form-group">
+                                <label asp-for="Employee.JobStartDate" class="control-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-regular fa-calendar-days"></i>
+                                    </span>
+                                    <input asp-for="Employee.JobStartDate" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Employee.JobStartDate" class="text-danger"></span>
+                            </div>
+
+                            @*   <div class="form-group">
+                            <label asp-for="Employee.JobStartDate" class="control-label"></label>
+                            <input asp-for="Employee.JobStartDate" class="form-control" />
+                            <span asp-validation-for="Employee.JobStartDate" class="text-danger"></span>
+                            </div> *@
+                        </div>
+                    </div>
+                    @* <div class="form-group">
+                        <label asp-for="Employee.TerminationDate" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-calendar-days"></i>
+                            </span>
+                            <input asp-for="Employee.TerminationDate" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Employee.TerminationDate" class="text-danger"></span>
+                    </div>
+ *@
+                    <div class="form-group">
+                        <label asp-for="Employee.WorkPhone" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-phone"></i>
+                            </span>
+                            <input asp-for="Employee.WorkPhone" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Employee.WorkPhone" class="text-danger"></span>
+                    </div>
+                    @*    <div class="form-group">
+                    <label asp-for="Employee.WorkPhone" class="control-label"></label>
+                    <input asp-for="Employee.WorkPhone" class="form-control" />
+                    <span asp-validation-for="Employee.WorkPhone" class="text-danger"></span>
+                    </div> *@
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="Employee.HashedPassword" class="control-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </span>
+                                    @*   <input asp-for="Employee.HashedPassword" class="form-control" type="password" /> *@
+                                    <input asp-for="Employee.HashedPassword" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Employee.HashedPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                        @* <div class="col-6">
+                        <div class="form-group">
+                        <label asp-for="Employee.HashedPassword" class="control-label"></label>
+                        <input asp-for="Employee.HashedPassword" class="form-control" />
+                        <span asp-validation-for="Employee.HashedPassword" class="text-danger"></span>
+                        </div>
+                        </div> *@
+                        <div class="col-6">
+
+                            <div class="form-group">
+                                <label for="confirmPassword" class="control-label">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </span>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" />
+                                </div>
+                                <span id="passwordMatchError" class="text-danger"></span> <span id="passwordMatchError" class="text-danger"></span>
+
+                            </div>
+                            @*  <div class="form-group">
+                            <label for="confirmPassword" class="control-label">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" />
+                            <span id="passwordMatchError" class="text-danger"></span>
+                            </div> *@
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="col-12 col-md-6 col-lg-4 mt-3 mt-md-0 mb-3 mb-md-0">
+
+                    <div class="form-group">
+                        <label asp-for="Employee.LastName" class="control-label"></label>
+                        <input asp-for="Employee.LastName" class="form-control" />
+                        <span asp-validation-for="Employee.LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.SIN" class="control-label"></label>
+                        <input asp-for="Employee.SIN" class="form-control" />
+                        <span asp-validation-for="Employee.SIN" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="Employee.City" class="control-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                    </span>
+                                    <input asp-for="Employee.City" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Employee.City" class="text-danger"></span>
+                            </div>
+                            @*   <div class="form-group">
+                            <label asp-for="Employee.City" class="control-label"></label>
+                            <input asp-for="Employee.City" class="form-control" oninput="toUpperCaseInput(this)" />
+                            <span asp-validation-for="Employee.City" class="text-danger"></span>
+                            </div> *@
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="Employee.PostalCode" class="control-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                    </span>
+                                    <input asp-for="Employee.PostalCode" class="form-control" style="text-transform: uppercase;" />
+                                </div>
+                                <span asp-validation-for="Employee.PostalCode" class="text-danger"></span>
+                            </div>
+                            @*  <div class="form-group">
+                            <label asp-for="Employee.PostalCode" class="control-label"></label>
+                            <input asp-for="Employee.PostalCode" class="form-control" />
+                            <span asp-validation-for="Employee.PostalCode" class="text-danger"></span>
+                            </div> *@
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Employee.OfficeLocation" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </span>
+                            <input asp-for="Employee.OfficeLocation" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Employee.OfficeLocation" class="text-danger"></span>
+                    </div>
+                    @* <div class="form-group">
+                    <label asp-for="Employee.OfficeLocation" class="control-label"></label>
+                    <input asp-for="Employee.OfficeLocation" class="form-control" />
+                    <span asp-validation-for="Employee.OfficeLocation" class="text-danger"></span>
+                    </div> *@
+                    <div class="form-group">
+                        <label asp-for="Employee.CellPhone" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-phone"></i>
+                            </span>
+                            <input asp-for="Employee.CellPhone" class="form-control" id="cellPhoneInput" />
+                        </div>
+                        <span asp-validation-for="Employee.CellPhone" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.Email" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-envelope"></i>
+                            </span>
+                            <input asp-for="Employee.Email" class="form-control" type="email" />
+                        </div>
+                        <span asp-validation-for="Employee.Email" class="text-danger"></span>
+                    </div>
+
+                    @* <div class="form-group">
+                    <label asp-for="Employee.Email" class="control-label"></label>
+                    <input asp-for="Employee.Email" class="form-control" />
+                    <span asp-validation-for="Employee.Email" class="text-danger"></span>
+                    </div> *@
+                </div>
+
+            </div>
+
+            <div class="row justify-content-center mt-3">
+                <div class="col-8 text-center">
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary w-50" />
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        $(document).ready(function () {
+            console.log("js started");
+
+            var roleNames = {
+                1: "HR Supervisor",
+                2: "Regular Supervisor",
+                3: "HR Employee",
+                4: "Regular Employee"
+            };
+
+
+            $('input').focus(function () {
+                $('#errorMessageRow').hide();
+            });
+
+
+            // Password matching
+            function checkPasswordMatch() {
+                var hashedPassword = $('#Employee_HashedPassword').val();
+                var confirmPassword = $('#confirmPassword').val();
+
+                if (hashedPassword !== confirmPassword) {
+                    $('#passwordMatchError').text('Passwords do not match.');
+                    $('input[type="submit"]').prop('disabled', true);
+                } else {
+                    $('#passwordMatchError').text('');
+                    $('input[type="submit"]').prop('disabled', false);
+                }
+            }
+
+
+            $('#Employee_HashedPassword, #confirmPassword').on('keyup', checkPasswordMatch);
+
+
+            function getRecommendedRoleId(positionId) {
+                switch (positionId) {
+                    case 1:
+                        return 0;
+                    case 3:
+                    case 5:
+                    case 6:
+                    case 17:
+                    case 22:
+                        return 2; // Regular Supervisor
+                    case 4:
+                        return 1; // HR Supervisor
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                    case 16:
+                    case 18:
+                    case 21:
+                        return 4; // Regular Employee
+                    case 19:
+                    case 20:
+                        return 3; // HR Employee
+                    default:
+                        return 0; // Default to no role if no specific case matches
+                }
+            }
+
+            // JobAssignment selection
+            $('#jobAssignment').change(function () {
+                console.log("position changed");
+                var positionId = parseInt($(this).val());
+                if (positionId === 1) {
+                    $('#role').prop('disabled', true);
+                    $('#department').prop('disabled', true).val('');
+                    $('#supervisor').prop('disabled', true).val('');
+                    $('#roleMessage').text('');
+                    $('#departmentMessage').text('');
+                    $('#supervisorMessage').text('');
+                } else {
+                    $('#role').prop('disabled', false);
+                    $('#department').prop('disabled', false);
+                    $('#supervisor').prop('disabled', false);
+                }
+            });
+
+            //Role selection
+            $('#role').change(function () {
+                var positionId = parseInt($('#jobAssignment').val());
+                var selectedRoleId = parseInt($(this).val());
+                var recommendedRoleId = getRecommendedRoleId(positionId);
+
+                if (selectedRoleId === recommendedRoleId) {
+                    $('#roleMessage').text('');
+                    $('#roleMessage').removeClass('text-danger');
+                }
+            });
+
+            // Department selection
+            $('#department').change(function () {
+                var departmentId = $(this).val();
+                if (!departmentId) {
+                    $('#departmentMessage').text('Please select a department.');
+                    $('#departmentMessage').addClass('text-danger');
+                    $('#supervisor').prop('disabled', true);
+                } else {
+                    $('#departmentMessage').text('');
+                    $('#departmentMessage').removeClass('text-danger');
+                    $('#supervisor').prop('disabled', false);
+                }
+            });
+
+            // Supervisor selection
+            $('#supervisor').change(function () {
+                var supervisorId = $(this).val();
+                if (!supervisorId) {
+                    $('#supervisorMessage').text('Please select a supervisor.');
+                    $('#supervisorMessage').addClass('text-danger');
+                } else {
+                    $('#supervisorMessage').text('');
+                    $('#supervisorMessage').removeClass('text-danger');
+                }
+            });
+
+
+            $('form').submit(function (event) {
+                var positionId = parseInt($('#jobAssignment').val());
+                if (positionId === 1) {
+                    return;
+                }
+
+
+                var departmentId = $('#department').val();
+                var supervisorId = $('#supervisor').val();
+                var selectedRoleId = parseInt($('#role').val());
+                var recommendedRoleId = getRecommendedRoleId(positionId);
+                var recommendedRoleName = roleNames[recommendedRoleId];
+
+                var hashedPassword = $('#Employee_HashedPassword').val();
+                var confirmPassword = $('#confirmPassword').val();
+
+                if (hashedPassword !== confirmPassword) {
+                    event.preventDefault();
+                    $('#passwordMatchError').text('Passwords do not match.');
+                    return;
+                }
+
+
+
+                if (!isNaN(positionId) && selectedRoleId !== recommendedRoleId) {
+                    console.log("inside role error")
+                    event.preventDefault();
+                    var message = 'Please select the recommended role for the selected position';
+                    if (recommendedRoleId !== 0) {
+                        message += ': ' + recommendedRoleName;
+                    }
+                    $('#roleMessage').text(message);
+                    $('#roleMessage').addClass('text-danger');
+                } else if (isNaN(positionId)) {
+                    event.preventDefault();
+                    $('#roleMessage').text('Please select a position to see recommended roles.');
+                    $('#roleMessage').addClass('text-danger');
+                }
+
+
+                if (!departmentId || !supervisorId) {
+                    event.preventDefault();
+                    if (!departmentId) {
+                        $('#departmentMessage').text('Please select a department.');
+                        $('#departmentMessage').addClass('text-danger');
+                    }
+                    if (!supervisorId) {
+                        $('#supervisorMessage').text('Please select a supervisor.');
+                        $('#supervisorMessage').addClass('text-danger');
+                    }
+                }
+
+            });
+
+        });
+
+    </script>
+
+
+}
+@* <script src="~/lib/jquery/jquery.min.js"></script>
+<script src="~/js/droplist.js"></script> *@

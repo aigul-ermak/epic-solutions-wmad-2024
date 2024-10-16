@@ -1,0 +1,89 @@
+﻿@model EpicSolutions.Model.ItemDTO
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Item</h1>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success text-center">
+                    @TempData["Success"]
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-warning text-center">
+                    @TempData["Error"]
+                </div>
+            }
+        </div>
+    </div>
+</div
+
+
+<h4>Item Detail</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4 offset-3">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="ItemId" class="form-control" type="hidden"/>
+                <input asp-for="ItemRowVersion" class="form-control" type="hidden" />
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemName" class="control-label"></label>
+                <input asp-for="ItemName" class="form-control" />
+                <span asp-validation-for="ItemName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemPrice" class="control-label"></label>
+                <input asp-for="ItemPrice" class="form-control" />
+                <span asp-validation-for="ItemPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemPurchaseLocation" class="control-label"></label>
+                <input asp-for="ItemPurchaseLocation" class="form-control" />
+                <span asp-validation-for="ItemPurchaseLocation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ItemJustification" class="control-label"></label>
+                <input asp-for="ItemJustification" class="form-control" />
+                <span asp-validation-for="ItemJustification" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="StatusName" class="form-control" type="hidden" />
+                <input asp-for="DenyReason" class="form-control" type="hidden"/>
+                <input asp-for="OrderId" class="form-control" type="hidden"/>
+            </div>
+            <div class="form-group pt-2">
+                <input type="submit" value="Save" class="btn btn-success" />
+                <div class="btn btn-info">
+                    @Html.ActionLink("Back to List", "Edit", "Order", new { id = Model.OrderId }, null)
+                </div>
+                              
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

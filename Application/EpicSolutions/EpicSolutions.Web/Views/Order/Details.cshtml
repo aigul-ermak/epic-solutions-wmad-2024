@@ -1,0 +1,225 @@
+﻿@model EpicSolutions.Model.OrderWithItemDTO
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+
+@{
+    ViewData["Title"] = "Order Details";
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("Role");
+    bool hasPendingItems = Model.Items.Any(item => item.StatusName == "Pending");
+    bool isOrderClosed = Model.OrderDetails.StatusName == "Close";
+    bool isUnderReview = Model.OrderDetails.StatusName == "Under Review";
+    bool isSupervisor = (userRole == "HR Employee" || userRole == "Regular Supervisor");
+
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success text-center">
+                    @TempData["Success"]
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-warning text-center">
+                    @TempData["Error"]
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<h1>Order</h1>
+
+<h2>
+    @Html.DisplayFor(model => model.OrderDetails!.PoNumber),
+    @Html.DisplayFor(model => model.OrderDetails!.StatusName)
+    @if (!hasPendingItems && !isOrderClosed && isSupervisor)
+        {
+            <div class="btn btn-outline-danger">
+                @Html.ActionLink("Close Order", "Close", new { id = Model.OrderDetails.OrderId }, new { onclick = "return confirmCloseOrder();" })
+            </div>
+        }
+</h2>
+
+<div>
+    <h4>Order and Item Details</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-2">
+            <dl class="dl-horizontal">
+                <dt>@Html.DisplayNameFor(model => model.OrderDetails!.EmployeeName)</dt>
+                <dd>@Html.DisplayFor(model => model.OrderDetails!.EmployeeName)</dd>
+                <dt>@Html.DisplayNameFor(model => model.OrderDetails!.CreationDate)</dt>
+                <dd>@Html.DisplayFor(model => model.OrderDetails!.CreationDate)</dd>
+            </dl>
+        </div>
+        <div class="col-md-2">
+            <dl class="dl-horizontal">
+                <dt>@Html.DisplayNameFor(model => model.OrderDetails!.Department)</dt>
+                <dd>@Html.DisplayFor(model => model.OrderDetails!.Department)</dd>
+                <dt>@Html.DisplayNameFor(model => model.OrderDetails!.SupervisorName)</dt>
+                <dd>@Html.DisplayFor(model => model.OrderDetails!.SupervisorName)</dd>
+            </dl>
+        </div>
+    </div>
+
+</div>
+
+<table class="table">
+    @if (Model.Items!.Count == 0)
+    {
+        <tr>
+            <td>This order don't have items.</td>
+        </tr>
+    }
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Items![0].ItemName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Items![0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Items![0].ItemPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Items![0].Quantity)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.Items![0].SubTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Items![0].Tax)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Items![0].Total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Items![0].ItemPurchaseLocation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Items![0].ItemJustification)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Items![0].StatusName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubTotal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tax)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Total)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemPurchaseLocation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemJustification)
+                </td>
+                <td>
+                    @if ((isSupervisor && isUnderReview) || (!isSupervisor && isOrderClosed))
+                    {
+                        @Html.DisplayFor(modelItem => item.StatusName);
+                    }
+                    else if (!isSupervisor && isUnderReview)
+                    {
+                        @:Under Review
+                    }else{
+                        @Html.DisplayFor(modelItem => item.StatusName)
+                    }
+                   
+                </td>
+                @if ((!isOrderClosed) && item.StatusName == "Pending" && !string.IsNullOrEmpty(userRole) && isSupervisor)
+                {
+                    <td>
+                        <div class="btn btn-outline-info">@Html.ActionLink("Approve", "Approve", new { 
+                            id = item.ItemId, rowVersion = Convert.ToBase64String(item.ItemRowVersion) })</div>
+                        <div class="btn btn-outline-danger">@Html.ActionLink("Deny", "Deny", new { id = item.ItemId, rowVersion = Convert.ToBase64String(item.ItemRowVersion) })</div>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="container">
+    <div class="row">
+        <div class="col-md-1 offset-md-11">
+            <dl class="dl-horizontal">
+                <dt>@Html.DisplayNameFor(model => model.OrderDetails!.SubTotal)</dt>
+                <dd>@Html.DisplayFor(model => model.OrderDetails!.SubTotal)</dd>
+                <dt>@Html.DisplayNameFor(model => model.OrderDetails!.Tax)</dt>
+                <dd>@Html.DisplayFor(model => model.OrderDetails!.Tax)</dd>
+                <dt>@Html.DisplayNameFor(model => model.OrderDetails!.Total)</dt>
+                <dd>@Html.DisplayFor(model => model.OrderDetails!.Total)</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div>
+    @if (ViewBag.PrevId != null)
+    {
+        <a asp-action="Details" asp-route-id="@ViewBag.PrevId">Previous</a>
+    }
+    @if (ViewBag.NextId != null)
+    {
+        <a asp-action="Details" asp-route-id="@ViewBag.NextId">Next</a>
+    }
+</div>
+
+
+<div>
+    <a class="btn btn-outline-secondary pb-2" asp-action="Index">Back to List</a>
+    @if (isSupervisor)
+    {
+        <a class="btn btn-outline-secondary pb-2" asp-action="Search">Back to Processing</a>
+    }
+    
+</div>
+
+
+
+@section Scripts {
+    <script>
+        function confirmCloseOrder() {
+            if (confirm('Would you like to close this order?')) {
+                window.location.href = '@Url.Action("Close", new { id = Model.OrderDetails.OrderId })';
+            }
+        }
+    </script>
+
+    @if (!hasPendingItems && !isOrderClosed && isSupervisor)
+    {
+        <script>
+            $(document).ready(function () {
+                setTimeout(confirmCloseOrder, 1500);
+            });
+        </script>
+    }
+}
+

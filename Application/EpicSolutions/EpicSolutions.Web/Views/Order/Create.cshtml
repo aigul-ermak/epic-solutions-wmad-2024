@@ -1,0 +1,358 @@
+﻿@model EpicSolutions.Model.OrderItemDTO
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create New Order</h2>
+<hr />
+<div class="row">
+    <div class="col-md-3">
+        <dl class="dl-horizontal">
+            <dt>Order Number:</dt>
+            <dd id="PONumber"></dd>
+            <dt>Employee Name:</dt>
+            <dd>@ViewData["EmployeeName"]</dd>
+            <dt>Department:</dt>
+            <dd>@ViewData["DepartmentName"]</dd>
+            <dt>Supervisor:</dt>
+            <dd>@ViewData["Supervisor"]</dd>
+            <dt>Order Status:</dt>
+            <dd>Pending</dd>
+            <dt>Creation Date:</dt>
+            <dd>@DateTime.Now.ToString("yyyy-MM-dd")</dd>
+        </dl>
+        <div class="text-info">
+            <strong>Subtotal:</strong> <span id="subtotal">$0.00</span>
+        </div>
+        <div class="text-info">
+            <strong>Tax (15%):</strong> <span id="tax">$0.00</span>
+        </div>
+        <div class="text-info">
+            <strong>Total:</strong> <span id="total">$0.00</span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <form asp-action="Create">
+            @if (Model.Errors.Count > 0)
+            {
+                <div class="text-danger">
+                    <ul>
+                        @foreach (var e in Model.Order.Errors.Where(e => e.ErrorType == EpicSolutions.Types.ErrorType.Business))
+                        {
+                            <li>@e.Description</li>
+                        }
+                    </ul>
+                </div>
+            }
+            @ViewData["OrderNumber"]
+
+            @* JS Validation here*@
+            <div id="errorMessages" class="alert alert-danger" style="display: none;"></div>
+
+            @* JS Success message here*@
+            <div id="successMessages" class="alert alert-success" style="display: none;"></div>
+
+
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="Order.EmployeeId" class="form-control" type="hidden" />
+                        <input asp-for="Order.StatusId" class="form-control" type="hidden" />
+                        <input asp-for="OrderNumber" class="form-control" type="hidden" />
+                        <div class="form-group">
+                            <label asp-for="Item.ItemName" class="control-label"></label>
+                            <input asp-for="Item.ItemName" class="form-control input-field" />
+                            <span asp-validation-for="Item.ItemName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Item.Description" class="control-label"></label>
+                            <input asp-for="Item.Description" class="form-control input-field" />
+                            <span asp-validation-for="Item.Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Item.Quantity" class="control-label"></label>
+                            <input asp-for="Item.Quantity" class="form-control input-field" id="quantity" type="number" value="0" step="1" />
+                            <span asp-validation-for="Item.Quantity" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Item.ItemPrice" class="control-label"></label>
+                            <input asp-for="Item.ItemPrice" class="form-control input-field" id="price" type="number" value="0.00" step="0.01" />
+                            <span asp-validation-for="Item.ItemPrice" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Item.ItemJustification" class="control-label"></label>
+                            <input asp-for="Item.ItemJustification" class="form-control input-field" />
+                            <span asp-validation-for="Item.ItemJustification" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Item.ItemPurchaseLocation" class="control-label"></label>
+                            <input asp-for="Item.ItemPurchaseLocation" class="form-control input-field" />
+                            <span asp-validation-for="Item.ItemPurchaseLocation" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <button type="button" class="btn btn-success" onclick="addItem()">Add New Item</button>
+                    <div class="btn btn-outline-secondary"><a asp-action="Index">Back to List</a></div>
+                </div>
+
+                <table class="table table-striped" id="itemsTable">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>SubTotal</th>
+                            <th>Tax</th>
+                            <th>Total</th>
+                            <th>Justification</th>
+                            <th>Purchase Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+           
+        </form>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+
+
+
+
+
+
+<script>
+    //calculate grand total by order here
+
+    function calculateTotal() {
+        var table = document.getElementById('itemsTable').getElementsByTagName('tbody')[0];
+        var rows = table.rows;
+        var grandSubtotal = 0;
+        var grandTax = 0;
+        var grandTotal = 0;
+
+        for (var i = 0; i < rows.length; i++) {
+            var quantity = parseFloat(rows[i].cells[2].textContent);
+            var price = parseFloat(rows[i].cells[3].textContent);
+            var subtotal = quantity * price;
+            var tax = subtotal * 0.15; // 15% tax rate
+            var total = subtotal + tax;
+
+            rows[i].cells[4].textContent = subtotal.toFixed(2);
+            rows[i].cells[5].textContent = tax.toFixed(2);
+            rows[i].cells[6].textContent = total.toFixed(2);
+
+            grandSubtotal += subtotal;
+            grandTax += tax;
+            grandTotal += total;
+        }
+
+        document.getElementById('subtotal').textContent = '$' + grandSubtotal.toFixed(2);
+        document.getElementById('tax').textContent = '$' + grandTax.toFixed(2);
+        document.getElementById('total').textContent = '$' + grandTotal.toFixed(2);
+    }
+
+    // create order and item object and send post request
+    function addItem() {
+
+        var employeeId = document.getElementById('Order_EmployeeId').value;
+        var statusId = document.getElementById('Order_StatusId').value;
+        var poNumber = document.getElementById('OrderNumber').value;
+
+        var itemName = document.getElementById('Item_ItemName').value;
+        var description = document.getElementById('Item_Description').value;
+        var quantity = document.getElementById('quantity').value;
+        var price = document.getElementById('price').value;
+        var justification = document.getElementById('Item_ItemJustification').value;
+        var purchaseLocation = document.getElementById('Item_ItemPurchaseLocation').value;
+
+
+
+        var errorMessage = '';
+
+        if (!itemName || itemName.length < 3 || itemName.length > 45) {
+            errorMessage += 'Item name must be between 3 and 45 characters. ';
+        }
+        if (!description || description.length < 5) {
+            errorMessage += 'Item description must be at least 5 characters. ';
+        }
+        if (!justification || justification.length < 4) {
+            errorMessage += 'Justification must be at least 4 characters. ';
+        }
+        if (!purchaseLocation || purchaseLocation.length < 5) {
+            errorMessage += 'Purchase location must be at least 5 characters. ';
+        }
+        if (quantity <= 0 || price <= 0) {
+            errorMessage += 'Quantity and price must be greater than 0. ';
+        }
+
+        if (errorMessage.length > 0) {
+            var errorDiv = document.getElementById('errorMessages');
+            errorDiv.innerHTML = errorMessage;
+            errorDiv.style.display = 'block';
+            return;
+        } 
+
+        var errorDiv = document.getElementById('errorMessages');
+        errorDiv.style.display = 'none';
+
+        //end validation
+
+
+        var subtotal = quantity * price;
+        var tax = subtotal * 0.15;
+        var total = subtotal + tax;
+
+        var orderData = {
+            EmployeeId: employeeId,
+            StatusId: statusId
+        }
+       
+
+        var itemData = {
+            ItemName: itemName,
+            Description: description,
+            Quantity: quantity,
+            ItemPrice: price,
+            ItemJustification: justification,
+            ItemPurchaseLocation: purchaseLocation
+        };
+        
+        var ord = {
+            OrderNumber: poNumber,
+            Order: orderData,
+            Item: itemData
+        }
+       
+
+        fetch('/Order/Create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.getElementsByName('__RequestVerificationToken')[0].value
+            },
+            body: JSON.stringify(ord)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+
+                        //get and show po number
+                        document.getElementById('PONumber').textContent = data.orderNumber;
+                        //set po number
+                        document.getElementById('OrderNumber').value = data.orderNumber;
+
+                   
+
+                   
+                        //success message
+                        var successMessages = 'Order and Item were created successfully';
+                        var successDiv = document.getElementById('successMessages');
+                        successDiv.innerHTML = successMessages;
+                        successDiv.style.display = 'block';
+
+
+                        //create table
+                        var table = document.getElementById('itemsTable').getElementsByTagName('tbody')[0];
+                    var rows = table.rows;
+                    var itemExists = false;
+                     
+
+
+                    //check row exist
+                    for (var i = 0; i < rows.length; i++) {
+                        if (rows[i].cells[0].textContent === itemName && 
+                            rows[i].cells[1].textContent === description &&
+                            rows[i].cells[3].textContent === price &&
+                            rows[i].cells[8].textContent === purchaseLocation &&
+                            rows[i].cells[7].textContent === justification) {
+                            // Item exists, update quantity and recalculate
+                            var existingQuantity = parseInt(rows[i].cells[2].textContent, 10);
+                            var newQuantity = existingQuantity + parseInt(quantity, 10);
+                            rows[i].cells[2].textContent = newQuantity;
+
+                            var subtotal = newQuantity * price;
+                            var tax = subtotal * 0.15;
+                            var total = subtotal + tax;
+
+                            rows[i].cells[4].textContent = subtotal.toFixed(2);
+                            rows[i].cells[5].textContent = tax.toFixed(2);
+                            rows[i].cells[6].textContent = total.toFixed(2);
+
+                            itemExists = true;
+                            break;
+                        }
+                    }
+
+
+                    if (!itemExists) {
+                        // add new row in table
+                        var newRow = table.insertRow();
+                        newRow.innerHTML = `<td>${itemName}</td>
+                                            <td>${description}</td>
+                                            <td>${quantity}</td>
+                                            <td>${price}</td>
+                                            <td>${subtotal}</td>
+                                            <td>${tax}</td>
+                                            <td>${total}</td>
+                                            <td>${justification}</td>
+                                            <td>${purchaseLocation}</td>`;
+
+                    }
+                        // clean form
+                        document.getElementById('Item_ItemName').value = '';
+                        document.getElementById('Item_Description').value = '';
+                        document.getElementById('quantity').value = '';
+                        document.getElementById('price').value = '';
+                        document.getElementById('Item_ItemJustification').value = '';
+                        document.getElementById('Item_ItemPurchaseLocation').value = '';
+
+                    calculateTotal();
+
+                } else {
+
+                    var errorDiv = document.getElementById('errorMessages');
+                    errorDiv.innerHTML = 'Failed to add item';
+                    errorDiv.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    //clean messages listener
+    document.addEventListener('DOMContentLoaded', function () {
+        var inputFields = document.querySelectorAll('.input-field');
+        inputFields.forEach(function (inputField) {
+            inputField.addEventListener('input', function () {
+                var successDiv = document.getElementById('successMessages');
+                successDiv.style.display = 'none';
+            });
+        });
+    });
+
+   
+
+</script>
+

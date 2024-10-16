@@ -1,0 +1,172 @@
+﻿@model EpicSolutions.Model.OrderWithItemDTO
+
+@{
+    ViewData["Title"] = "Edit Order";
+    bool isClose = (Model.OrderDetails.StatusName == "Close");
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success text-center">
+                    @TempData["Success"]
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-warning text-center">
+                    @TempData["Error"]
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<h2>Edit Order</h2>
+<hr />
+<div class="row">
+    <div class="col-md-2">
+        <dl class="dl-horizontal">
+            <dt>Order Number:</dt>
+            <dd>@Model.OrderDetails.PoNumber</dd>
+            <dt>Employee Name:</dt>
+            <dd>@Model.OrderDetails.EmployeeName</dd>
+            <dt>Department:</dt>
+            <dd>@Model.OrderDetails.Department</dd>
+            <dt>Supervisor:</dt>
+            <dd>@Model.OrderDetails.SupervisorName</dd>
+            <dt>Order Status:</dt>
+            <dd>@Model.OrderDetails.StatusName</dd>
+            <dt>Creation Date:</dt>
+            <dd>@Model.OrderDetails.CreationDate</dd>
+            
+        </dl>
+        <div class="text-info">
+            <strong>Subtotal:</strong> <span id="subtotal">@Model.OrderDetails.SubTotal.ToString("C2")</span>
+        </div>
+        <div class="text-info">
+            <strong>Tax (15%):</strong> <span id="tax">@Model.OrderDetails.Tax.ToString("C2")</span>
+        </div>
+        <div class="text-info">
+            <strong>Total:</strong> <span id="total">@Model.OrderDetails.Total.ToString("C2")</span>
+        </div>
+    </div>
+    <div class="col-md-9">
+
+        <table class="table">
+            @if (Model.Items!.Count == 0)
+            {
+                <tr>
+                    <td>This realtor does not have any listings yet.</td>
+                </tr>
+            }
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items![0].ItemId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items![0].ItemName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items![0].Quantity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items![0].Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items![0].ItemPrice)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items![0].StatusName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items![0].ItemPurchaseLocation)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items![0].ItemJustification)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items![0].SubTotal)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items![0].Tax)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items![0].Total)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var poitem in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => poitem.ItemId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => poitem.ItemName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => poitem.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => poitem.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => poitem.ItemPrice)
+                        </td>
+                        <td>
+                            @if (Model.OrderDetails.StatusName == "Under Review")
+                            {
+                                @:Under Review
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => poitem.StatusName)
+                            }
+                            </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => poitem.ItemJustification)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => poitem.ItemPurchaseLocation)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => poitem.SubTotal)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => poitem.Tax)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => poitem.Total)
+                        </td>
+
+                        <td class="d-lg-flex">
+                            @if (poitem.StatusName == "Pending" && !isClose)
+                            {
+                                <div class="btn btn-outline-warning p-2">@Html.ActionLink("Edit Item", "Edit", "Item", new { itemId = poitem.ItemId })</div>
+                                <div class="btn btn-outline-danger p-2">@Html.ActionLink("No Need", "NoNeed", "Item", new { itemId = poitem.ItemId })</div>
+                            }
+                        </td>
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (!isClose)
+        {
+            <div class="btn btn-outline-info">@Html.ActionLink("Add Item", "Create", "Item", new { orderId = Model.OrderDetails.OrderId }, null)</div>
+        }
+        <div class="btn btn-outline-secondary"><a asp-action="Index">Back to List</a></div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

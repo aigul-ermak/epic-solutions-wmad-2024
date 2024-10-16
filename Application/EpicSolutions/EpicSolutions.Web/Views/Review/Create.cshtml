@@ -1,0 +1,111 @@
+﻿@model EpicSolutions.Web.Models.ReviewCreateVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="main-content mt-5">
+
+    <h4 class="text-center mt-3">Create Review for @Model.FullName</h4>
+
+    <div class="row justify-content-center mt-3 mb-5">
+
+        <div class="col-6">
+
+            <div class="mb-2">
+                <a asp-controller="Review" asp-action="Index" asp-route-employeeId="@Model.SupervisorId" class="btn btn-outline-primary m-1 cardBoxShadow">Back to Employee List</a>
+            </div>
+
+            <div class="row justify-content-center" id="messageRow">
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="col-6">
+                        <div class="alert alert-danger " role="alert" id="errorMessageContainer">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <input type="hidden" asp-for="EmployeeId" />
+                <input type="hidden" asp-for="SupervisorId" />
+                <input type="hidden" asp-for="QuarterId" />
+
+
+                <div class="form-group">
+                    <label asp-for="FullName" class="control-label"></label>
+                    <input asp-for="FullName" class="form-control" readonly />
+                </div>
+
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="ReviewDate" class="control-label"></label>
+                            <input asp-for="ReviewDate" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="QuarterName" class="control-label"></label>
+                            <input asp-for="QuarterName" class="form-control" readonly />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="CompletionDate" class="control-label"></label>
+                            <input asp-for="CompletionDate" class="form-control" type="date" />
+                            <span asp-validation-for="CompletionDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="RatingId" class="control-label"></label>
+                            <select asp-for="RatingId" asp-items="Model.Ratings" class="form-control">
+                                <option value="">Select a Rating</option>
+                            </select>
+                            <span asp-validation-for="RatingId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Comment" class="control-label"></label>
+                    <textarea asp-for="Comment" class="form-control" rows="7"></textarea>
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+
+                <div class="form-group text-center mt-5">
+                    <input type="submit" value="Create" class="btn btn-primary w-50" />
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#messageRow').fadeOut('slow');
+            }, 3000); 
+        });
+    </script>
+}

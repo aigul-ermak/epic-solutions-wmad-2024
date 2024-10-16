@@ -1,0 +1,175 @@
+﻿@model EpicSolutions.Web.Models.DashboardVM
+
+
+
+<div class="row justify-content-center mt-5">
+
+    <div class="row justify-content-center" id="successMessageRow">
+        <div class="col-12 col-sm-6">
+            @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+            {
+                <div class="alert alert-success" role="alert">
+                    @ViewBag.SuccessMessage
+                </div>
+            }
+        </div>
+    </div>
+
+
+    <div class="col-12 col-md-3 p-3" style="background-color: @(ViewBag.UserRole == "Regular Supervisor" || ViewBag.UserRole == "HR Supervisor" ? "lightgray" : "lightblue");">
+        @Html.Partial("_EmployeePartial", Model.Employee)
+    </div>  
+
+    <div class="col-12 col-md-4 p-3" style="background-color: lightslategray;">
+
+        <div class="col-12">
+            <div class="card-deck">
+                <div class="row">
+                    @if (ViewBag.UserRole == "Regular Supervisor")
+                    {
+                        @if (ViewBag.UserId != 1){
+                            <div class="col-12 col-sm-6 col-md-6 mb-3">
+                                <div class="card h-100 mb-3">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">@Model.Department.Name</h5>
+                                        <p class="card-text">Department</p>
+                                        <a asp-controller="Department" asp-action="Edit" asp-route-departmentId="@Model.Department.Id" class="btn btn-outline-primary m-1 cardBoxShadow">Update</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-12 col-sm-6 col-md-6 mb-3">
+                            <div class="card h-100 mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Employee</h5>
+                                    <p class="card-text">Personal Information</p>
+                                    <a asp-controller="Employee" asp-action="Details" asp-route-employeeId="@Model.Employee.Id" class="btn btn-outline-primary m-1 cardBoxShadow">Update</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 mb-3">
+                            <div class="card h-100 mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Employee Review</h5>
+                                    <p class="card-text">Employee Review Performance</p>
+                                    <a asp-controller="Review" asp-action="Index" asp-route-employeeId="@Model.Employee.Id" class="btn btn-outline-primary m-1 cardBoxShadow">Create</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (ViewBag.UserRole == "Regular Employee")
+                    {
+                        <div class="col-12 col-sm-6 col-md-6 mb-3">
+                            <div class="card h-100 mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Employee</h5>
+                                    <p class="card-text">Personal Information</p>
+                                    <a asp-controller="Employee" asp-action="Details" asp-route-employeeId="@Model.Employee.Id" class="btn btn-outline-primary m-1 cardBoxShadow">Update</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 mb-3">
+                            <div class="card h-100 mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Employee Reviews</h5>
+                                    <p class="card-text">Review List</p>
+                                    <a asp-controller="Review" asp-action="Reviews" asp-route-employeeId="@Model.Employee.Id" class="btn btn-outline-primary m-1 cardBoxShadow">Read</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="row">
+                    @if (ViewBag.UserRole == "HR Employee")
+                    {
+                        <div class="col-12 col-sm-6 col-md-6 mb-3">
+                            <div class="card h-100 mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Employees</h5>
+                                    <p class="card-text">Information</p>
+                                    <a asp-controller="Employee" asp-action="Index" class="btn btn-outline-primary m-1 cardBoxShadow">Go</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 mb-3">
+                            <div class="card h-100 mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Departments</h5>
+                                    <p class="card-text">Information</p>
+                                    <a asp-controller="Department" asp-action="Index" class="btn btn-outline-primary m-1 cardBoxShadow">Go</a>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 col-sm-6 col-md-6 mb-3">
+                            <div class="card h-100 mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Employee</h5>
+                                    <p class="card-text">Personal Information</p>
+                                    <a asp-controller="Employee" asp-action="Details" asp-route-employeeId="@Model.Employee.Id" class="btn btn-outline-primary m-1 cardBoxShadow">Update</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-6 mb-3">
+                            <div class="card h-100 mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Employee Reviews</h5>
+                                    <p class="card-text">Review List</p>
+                                    <a asp-controller="Review" asp-action="Reviews" asp-route-employeeId="@Model.Employee.Id" class="btn btn-outline-primary m-1 cardBoxShadow">Read</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if (ViewBag.UserRole == "HR Supervisor")
+                    {
+                        <div class="col-12 col-sm-6 col-md-6 mb-3">
+                            <div class="card h-100 mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">@Model.Department.Name</h5>
+                                    <p class="card-text">Department</p>
+                                    <a asp-controller="Department" asp-action="Edit" asp-route-departmentId="@Model.Department.Id" class="btn btn-outline-primary m-1 cardBoxShadow">Update</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-6 mb-3">
+                            <div class="card h-100 mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Employee</h5>
+                                    <p class="card-text">Personal Information</p>
+                                    <a asp-controller="Employee" asp-action="Details" asp-route-employeeId="@Model.Employee.Id" class="btn btn-outline-primary m-1 cardBoxShadow">Update</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-6 mb-3">
+                            <div class="card h-100 mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Employee Review</h5>
+                                    <p class="card-text">Employee Review Performance</p>
+                                    <a asp-controller="Review" asp-action="Index" asp-route-employeeId="@Model.Employee.Id" class="btn btn-outline-primary m-1 cardBoxShadow">Create</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            function hideSuccessMessage() {
+                $('#successMessageRow').fadeOut('slow');
+            }
+
+            setTimeout(hideSuccessMessage, 3000);
+        });
+    </script>
+}

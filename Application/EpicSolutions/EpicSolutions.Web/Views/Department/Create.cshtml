@@ -1,0 +1,71 @@
+﻿@model EpicSolutions.Model.Department
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<h4 class="text-center mt-5"> Create Department</h4>
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form asp-action="Create">            
+
+            <div class="row justify-content-center" id="messageRow">
+                @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+                {
+                    <div class="alert alert-success" role="alert">
+                        @ViewBag.SuccessMessage
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
+            </div>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InvocationDate" class="control-label"></label>
+                <input asp-for="InvocationDate" type="date" class="form-control" />
+                <span asp-validation-for="InvocationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group text-center mt-5">
+                <input type="submit" value="Create" class="btn btn-primary w-50" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@* <div>
+    <a asp-action="Index">Back to List</a>
+</div> *@
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+
+            function hideSuccessMessage() {
+                $('#messageRow').fadeOut('slow');
+                }
+            }); 
+        });
+    </script>    
+}

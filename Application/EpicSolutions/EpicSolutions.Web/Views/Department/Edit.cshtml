@@ -1,0 +1,128 @@
+﻿@model EpicSolutions.Model.Department
+
+@{
+    ViewData["Title"] = "Personal";
+    var userRole = ViewBag.UserRole as string;
+}
+
+
+<h4 class="text-center mt-5"> Edit Department</h4>
+
+
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+
+        <div class="mb-5">
+            <a asp-controller="Department" asp-action="Index" class="btn btn-outline-primary m-1 cardBoxShadow">Back to Departments</a>
+        </div>
+
+        <div class="row justify-content-center" id="errorMessageRow">
+
+            <div id="messageDiv" class="alert alert-warning"></div>
+
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-danger" role="alert">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+        </div>
+
+        <form asp-action="Edit">
+
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="RecordVersion" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            @* <div class="form-group mt-3">
+                <label asp-for="InvocationDate" class="control-label"></label>
+                <input asp-for="InvocationDate" type="date" class="form-control" value="@Model.InvocationDate.ToString("yyyy-MM-dd")" readonly />
+            </div> *@
+            <div class="form-group mt-3">
+                <label asp-for="InvocationDate" class="control-label"></label>
+            @{
+               
+                    if (userRole == "HR Employee")
+                {                    
+                    <input asp-for="InvocationDate" type="date" class="form-control" value="@Model.InvocationDate.ToString("yyyy-MM-dd")" />
+                }
+                else
+                {                   
+                    <input asp-for="InvocationDate" type="date" class="form-control" value="@Model.InvocationDate.ToString("yyyy-MM-dd")" readonly />
+                }
+            }
+
+            </div>
+            <div class="form-group text-center mt-5">
+                <input type="submit" value="Update" class="btn btn-primary" style="width: 49%; margin-right: 1%;" />
+                <a asp-controller="Department" asp-action="Delete" asp-route-departmentId="@Model.Id" class="btn btn-delete" style="width: 49%;">Delete</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+        $(document).ready(function () {
+
+            console.log('js started');
+
+            $('#messageDiv').hide();
+            var isChanged = false;
+
+            $('input, select').change(function () {
+                console.log('changed!');
+                isChanged = true;
+            });
+
+            $(document).ready(function () {
+                setTimeout(function () {
+                    $('#errorMessageRow').hide();
+                    console.log('errorMessageRow has been hidden');
+                }, 5000);
+            });
+
+            $('form').submit(function (event) {
+                console.log('form');
+                if (!isChanged) {
+                    event.preventDefault();
+                    $('#messageDiv').text('No changes have been made. Please make changes before submitting.');
+                    $('#messageDiv').show();
+                }
+            }); 
+        });
+    </script>
+
+
+
+ @*    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            console.log('Document is ready!');
+            $('#messageDiv').hide();
+            var isChanged = false;
+
+            $('input, select').focus(function () {
+                console.log('inside input or select');
+                $('#errorMessageRow').hide();
+            });
+        });
+    </script> *@
+}

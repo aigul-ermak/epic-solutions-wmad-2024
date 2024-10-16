@@ -1,0 +1,90 @@
+﻿@model EpicSolutions.Model.ItemDTO
+
+@{
+    ViewData["Title"] = "Item Deny";
+}
+
+
+<h2>Item</h2>
+<hr></hr>
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger text-center">
+                @TempData["Error"]
+            </div>
+        }
+    </div>
+
+    <h4>Item Details</h4>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-2">
+             <dl class="dl-horizontal">
+                 <dt>@Html.DisplayNameFor(model => model.ItemId)</dt>
+                 <dd>@Html.DisplayFor(model => model.ItemId)</dd>
+                 <dt>@Html.DisplayNameFor(model => model.ItemName)</dt>
+                 <dd>@Html.DisplayFor(model => model.ItemName)</dd>
+                <dt>@Html.DisplayNameFor(model => model.Description)</dt>
+                <dd>@Html.DisplayFor(model => model.Description)</dd>
+             </dl>
+        </div>
+        <div class="col-md-2">
+            <dl class="dl-horizontal">
+                <dt>@Html.DisplayNameFor(model => model.ItemPurchaseLocation)</dt>
+                <dd>@Html.DisplayFor(model => model.ItemPurchaseLocation)</dd>
+                <dt>@Html.DisplayNameFor(model => model.ItemJustification)</dt>
+                <dd>@Html.DisplayFor(model => model.ItemJustification)</dd>
+                <dt>@Html.DisplayNameFor(model => model.StatusName)</dt>
+                <dd>@Html.DisplayFor(model => model.StatusName)</dd>
+            </dl>
+        </div>
+        <div class="col-md-2">
+            <dl class="dl-horizontal">
+                <dt>@Html.DisplayNameFor(model => model.ItemPrice)</dt>
+                <dd>@Html.DisplayFor(model => model.ItemPrice)</dd>
+                <dt>@Html.DisplayNameFor(model => model.Quantity)</dt>
+                <dd>@Html.DisplayFor(model => model.Quantity)</dd>
+            </dl>
+        </div>
+        <div class="col-md-2">
+            <dl class="dl-horizontal">
+                <dt>@Html.DisplayNameFor(model => model.SubTotal)</dt>
+                <dd>@Html.DisplayFor(model => model.SubTotal)</dd>
+                <dt>@Html.DisplayNameFor(model => model.Tax)</dt>
+                <dd>@Html.DisplayFor(model => model.Tax)</dd>
+                <dt>@Html.DisplayNameFor(model => model.Total)</dt>
+                <dd>@Html.DisplayFor(model => model.Total)</dd>
+            </dl>
+        </div>
+
+          <form asp-action="Deny" method="post">
+           
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="ItemId" class="form-control" type="hidden" />
+                        <input asp-for="stringItemRowVersion" class="form-control" type="hidden" />
+                        <div class="form-group">
+                            <label asp-for="DenyReason" class="control-label"></label>
+                            <input asp-for="DenyReason" class="form-control input-field" />
+                        </div>
+                        <div class="form-group pt-3">
+                            <input type="submit" class="btn btn-danger" value="Deny" />
+                            <a class="btn btn-success" asp-action="Details" asp-route-id="@Model.OrderId">Back to Details</a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </form>
+
+
+    </div>
+</div>

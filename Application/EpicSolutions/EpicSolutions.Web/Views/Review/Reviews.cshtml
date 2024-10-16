@@ -1,0 +1,62 @@
+﻿@model IEnumerable<EpicSolutions.Model.ReviewListDTO>;
+
+@{
+    ViewBag.Title = "Reviews";
+}
+
+
+<div class="main-content mt-5">
+
+
+
+    <div class="row justify-content-center mt-3 mb-5">
+
+        <div class="col-8">
+
+            <h3 text-center>Reviews</h3>
+
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+            }
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-dark">
+
+                        <tr>
+                            <th>Review Year</th>
+                            <th>Quarter Name</th>
+                            <th>Review Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var review in Model)
+                        {
+                            <tr>
+                                <input type="hidden" value="@review.EmployeeId" />
+                                <input type="hidden" value="@review.ReviewId" />
+                                <td>@review.Year</td>
+                                <td>@review.QuarterName</td>
+                                <td>
+                                @if (review.isRead){
+                                    <span style="color: green; font-size: 18px;">Read</span>
+                                } else {
+                                        <span style="color: red; font-size: 18px;">Not Read</span>
+                                }
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Detail", "Review", new { employeeId = review.EmployeeId, reviewId = review.ReviewId })" class="btn btn-primary">Details</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>

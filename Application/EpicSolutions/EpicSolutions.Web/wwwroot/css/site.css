@@ -1,0 +1,88 @@
+body, html {
+    height: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+
+header, footer {
+    flex-shrink: 0;
+}
+
+
+.main {
+    flex-grow: 1;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url('/lib/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 20px 0;
+    min-height: 70vh;
+}
+
+.icon-spacing {
+    margin-right: 5px;
+}
+
+.btn-primary {
+    background-color: #8576FF;
+    font-size: 20px;
+}
+
+
+    .btn-primary:hover {
+        background-color: #7BC9FF;
+    }
+
+
+.btn-delete {
+    background-color: #7BC9FF;
+    font-size: 20px;
+}
+
+
+    .btn-delete:hover {
+        background-color: #1C1678;
+        color: white;
+    }
+
+/*.form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+} */
+
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+footer {
+    margin-top: auto;
+    background-color: black;
+    color: white;
+    padding: 20px 0;
+}
+
+.footer, .footer ul li a {
+    line-height: normal;
+}
+
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 767px) {
+    .main {
+        min-height: calc(100vh - 200px);
+    }
+
+    .main-text {
+        padding-bottom: 200px;
+    }
+}

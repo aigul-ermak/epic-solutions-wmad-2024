@@ -1,0 +1,190 @@
+﻿@model IEnumerable<EpicSolutions.Model.OrderDTO>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Your orders list</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <form asp-action="Search">
+            <div class="input-group form-control-sm ps-sm-3">
+                <dl class="dl-horizontal">
+                    <dt>
+                        <label>Start Date</label>
+                    </dt>
+                    <dd>
+                        <input name="StartDate" value="@ViewBag.StartDate" class="form-control" type="date" />
+                    </dd>
+                    <dt>
+                        <label>End Date Date</label>
+                    </dt>
+                    <dd>
+                        <input name="EndDate" value="@ViewBag.EndDate" class="form-control" type="date" />
+                    </dd>
+                    <dt>
+                        <label>PO Number</label>
+                    </dt>
+                    <dd>
+                        <input name="PONumber" value="@ViewBag.PONumber" class="form-control" type="text" />
+                    </dd>
+                    <dt>
+                        <label>Employee Full Name</label>
+                    </dt>
+                    <dd>
+                        <input name="fullName" value="@ViewBag.Employee" class="form-control" type="text" />
+                    </dd>
+                    <dt>
+                        <label>PO Status</label>
+                    </dt>
+                    <dd>
+                        <select name="Status" class="form-select">
+
+                            @if (ViewBag.Status as string == "Pending")
+                            {
+                                <option value="Pending" selected>Pending</option>
+                            }
+                            else
+                            {
+                                <option value="Pending">Pending</option>
+                            }
+                            @if (ViewBag.Status as string == "Under Review")
+                            {
+                                <option value="Under Review" selected>Under Review</option>
+                            }
+                            else
+                            {
+                                <option value="Under Review">Under Review</option>
+                            }
+                            @if (ViewBag.Status as string == "Close")
+                            {
+                                <option value="Close" selected>Close</option>
+                            }
+                            else
+                            {
+                                <option value="Close">Close</option>
+                            }
+                            @if (ViewBag.Status as string == "All")
+                            {
+                                <option value="All" selected>All</option>
+                            }
+                            else
+                            {
+                                <option value="All">All</option>
+                            }
+
+
+                        </select>
+                    </dd>
+                    <dd>
+                        <span class="list-group-numbered" id="basic-text1">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="reset" class="btn btn-primary">Reset</button>
+                        </span>
+                    </dd>
+                </dl>
+            </div>
+        </form>
+
+    </div>
+    <div class="col-md-8">
+
+        @if (TempData["SearchEmpty"] != null)
+        {
+
+            <div class="alert alert-warning text-center">
+                @TempData["SearchEmpty"]
+            </div>
+
+        }
+
+        @if (TempData["SearchEmpty"] == null)
+        {
+
+            <table class="table">
+                <thead>
+                    <tr>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.PoNumber)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreationDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.EmployeeName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.StatusName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SubTotal)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Tax)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Total)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+ 
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PoNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreationDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StatusName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SubTotal)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Tax)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Total)
+                            </td>
+                            <td>
+
+                                @Html.ActionLink("Details", "Details", new { id = item.OrderId })
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+
+            <div class="row justify-content-center p-3">
+                <div class="col-md-1">
+
+                    @if (Model.Count() > 0)
+                    {
+                        <nav aria-label="Navigation">
+                            <ul class="pagination">
+                                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                {
+                                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Search", new { page = i, startDate = ViewBag.StartDate, endDate = ViewBag.EndDate, poNumber = ViewBag.PONumber, fullName = ViewBag.Employee, status = ViewBag.Status })">@i</a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    }
+                </div>
+            </div>
+
+        }

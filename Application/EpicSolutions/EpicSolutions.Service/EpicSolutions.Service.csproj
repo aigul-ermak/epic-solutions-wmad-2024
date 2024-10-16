@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EpicSolutions.Model\EpicSolutions.Model.csproj" />
+    <ProjectReference Include="..\EpicSolutions.Repo\EpicSolutions.Repo.csproj" />
+  </ItemGroup>
+
+</Project>

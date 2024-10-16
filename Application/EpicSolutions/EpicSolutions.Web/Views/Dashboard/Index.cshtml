@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1 class="text-center mt-5">Welcome to the Dashboard</h1>
+
+<div class="row justify-content-center">
+
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewBag.SuccessMessage
+        </div>
+    }
+</div>
+
+

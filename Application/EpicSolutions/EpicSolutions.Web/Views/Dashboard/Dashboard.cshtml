@@ -1,0 +1,12 @@
+﻿@model EpicSolutions.Web.Models.DashboardVM
+
+<div class="row justify-content-center">   
+
+    <div class="col-2 mt-5" style="background-color: red;">
+        @Html.Partial("_EmployeePartial", Model.Employee) 
+    </div>
+
+    <div class="col-8" style="background-color: green;">
+        @Html.Partial("_DepartmentPartial", Model.Department)
+    </div>
+</div>

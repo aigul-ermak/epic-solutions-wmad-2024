@@ -1,0 +1,65 @@
+﻿@model EpicSolutions.Web.Models.ReviewAddVM
+
+@{
+    ViewData["Title"] = "Create Review";
+}
+
+
+<div class="container mt-5">
+    <h3 class="text-center">Employees' Pending Reviews</h3>
+
+    <div class="row justify-content-center" id="successMessageRow">
+        <div class="col-12 col-sm-6">
+            @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+            {
+                <div class="alert alert-success" role="alert">
+                    @ViewBag.SuccessMessage
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (Model.Employees != null && Model.Employees.Any())
+    {
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 10%;">Year</th>
+                    <th style="width: 20%;">Quarter</th>
+                    <th style="width: 20%;">Last Name</th>
+                    <th style="width: 20%;">First Name</th>
+                    <th style="width: 10%;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var employee in Model.Employees)
+                {
+                    <tr>
+                        <td>@employee.Year</td>
+                        <td>@employee.QuarterName </td>                        
+                        <td>@employee.LastName</td>
+                        <td>@employee.FirstName</td>
+                        <td>
+                        <a asp-controller="Review" asp-action="Create"
+                               asp-route-employeeId="@employee.EmployeeId"
+                               asp-route-year="@employee.Year"
+                               asp-route-quarter="@employee.Quarter"   
+                               asp-route-firstName ="@employee.FirstName"
+                               asp-route-lastName ="@employee.LastName"
+                        class="btn btn-primary m-1 cardBoxShadow">Create</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No employees found.</p>
+    }
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

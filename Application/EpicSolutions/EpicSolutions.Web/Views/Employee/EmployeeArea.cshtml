@@ -1,0 +1,480 @@
+﻿@model EpicSolutions.Web.Models.EmployeeAreaVM
+
+@{
+    ViewData["Title"] = "EmployeeArea";
+}
+<div class="row justify-content-center mt-3" id="errorMessageRow">
+
+    <div id="messageDiv" class="alert alert-warning"></div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="col-6">
+            <div class="alert alert-success" role="alert">
+                @TempData["SuccessMessage"]
+            </div>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty((string)ViewBag.SuccessMessage))
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewBag.SuccessMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="col-6">
+            <div class="alert alert-danger " role="alert" id="errorMessageContainer">
+                @ViewBag.ErrorMessage
+            </div>
+        </div>
+    }
+</div>
+<h4 class="text-center mt-2">Employee Area</h4>
+
+<div class="row">
+    <div class="justify-content-center mt-2 mb-5">
+        <div>
+            <a asp-controller="Employee" asp-action="Dashboard" class="btn btn-outline-primary m-1 cardBoxShadow">Back to Dashboard</a>
+        </div>
+        <form asp-action="EmployeeArea" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row justify-content-center border border-dark rounded m-3 p-3">
+
+                <div class="col-12 col-md-3 col-lg-2 mt-3 mt-md-0 mb-3 mb-md-0 pb-3 pb-md-0">
+                    <input type="hidden" asp-for="Employee.Id" />
+                    <input type="hidden" asp-for="Employee.RecordVersion" />
+
+
+                    <div class="form-group">
+                        <label asp-for="Employee.EmployeeNumber" class="control-label">
+
+                        </label>
+                        <input asp-for="Employee.EmployeeNumber" class="form-control" readonly />
+                        <span asp-validation-for="Employee.EmployeeNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.StatusId" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-calendar-days"></i>
+                            </span>
+                        @if (Model.isRetired)
+                        {
+                            <select asp-for="Employee.StatusId" asp-items="Model.Statuses" class="form-control" disabled>
+                                <option value="">-- Select Status --</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select asp-for="Employee.StatusId" asp-items="Model.Statuses" id="statusId" class="form-control">
+                                <option value="">-- Select Status --</option>
+                            </select>
+                        }
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-caret-down"></i>
+                            </span>
+                        </div>
+                        <span asp-validation-for="Employee.StatusId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.RetirementDate" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-calendar-days"></i>
+                            </span>
+                            @if (Model.isRetired)
+                            {
+                                <input asp-for="Employee.RetirementDate" class="form-control" readonly />
+                            }
+                            else
+                            {
+                                <input asp-for="Employee.RetirementDate" id="retirementDate" class="form-control" />
+                            }
+                        </div>
+                        <span id="retirementDate" asp-validation-for="Employee.RetirementDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.TerminationDate" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-calendar-days"></i>
+                            </span>
+                            @if (Model.isRetired)
+                            {
+                                <input asp-for="Employee.TerminationDate" class="form-control" readonly />
+                            }
+                            else
+                            {
+                                <input asp-for="Employee.TerminationDate" id="terminationDate" class="form-control" />
+                            }
+                        </div>
+                        <span id="terminationDate" asp-validation-for="Employee.TerminationDate" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.JobStartDate" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-calendar-days"></i>
+                            </span>
+                        <input asp-for="Employee.JobStartDate" class="form-control" readonly />
+                        </div>
+                        <span id="jobStartDateError" asp-validation-for="Employee.JobStartDate" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-md-5 col-lg-6  mt-3 mt-md-0 mb-3 mb-md-0 pb-3 pb-md-0">
+
+
+                    <div class="row">
+                        <div class="col-4">
+
+                            <div class="form-group">
+                                <label asp-for="Employee.FirstName" class="control-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-regular fa-id-card"></i>
+                                    </span>
+                                    <input asp-for="Employee.FirstName" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Employee.FirstName" class="text-danger"></span>
+                            </div>
+
+
+                        </div>
+
+                        <div class="col-4">
+
+                            <div class="form-group">
+
+                                <label asp-for="Employee.MiddleInitial" class="control-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-regular fa-id-card"></i>
+                                    </span>
+                                    <input asp-for="Employee.MiddleInitial" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Employee.MiddleInitial" class="text-danger"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-4">
+
+                            <div class="form-group">
+                                <label asp-for="Employee.LastName" class="control-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-regular fa-id-card"></i>
+                                    </span>
+                                    <input asp-for="Employee.LastName" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Employee.LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Employee.DOB" class="control-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fa-regular fa-calendar-days"></i>
+                                </span>
+                                @if (Model.isRetired)
+                                {
+                                    <input asp-for="Employee.DOB" class="form-control" readonly />
+                                }
+                                else
+                                {
+                                    <input asp-for="Employee.DOB" class="form-control" />
+                                }
+                            </div>
+                            <span asp-validation-for="Employee.DOB" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Employee.StreetAddress" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </span>
+                            <input asp-for="Employee.StreetAddress" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Employee.StreetAddress" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.City" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </span>
+                            <input asp-for="Employee.City" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Employee.City" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="Employee.PostalCode" class="control-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                    </span>
+                                    <input asp-for="Employee.PostalCode" class="form-control" style="text-transform: uppercase;" />
+                                </div>
+                                <span asp-validation-for="Employee.PostalCode" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="Employee.CellPhone" class="control-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-phone"></i>
+                                    </span>
+                                    <input asp-for="Employee.CellPhone" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Employee.CellPhone" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.SupervisorEmployeeId" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-circle-user"></i>
+                            </span>
+                        @if (Model.isRetired)
+                        {
+                            <select asp-for="Employee.SupervisorEmployeeId" asp-items="Model.Supervisors" class="form-control" disabled>
+                                <option value="">-- Select Supervisor --</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select asp-for="Employee.SupervisorEmployeeId" asp-items="Model.Supervisors" class="form-control">
+                                <option value="">-- Select Supervisor --</option>
+                            </select>
+                        }
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-caret-down"></i>
+                            </span>
+                        </div>
+                        <span asp-validation-for="Employee.SupervisorEmployeeId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-5 col-lg-3 mt-3 mt-md-0 mb-3 mb-md-0 pb-3 pb-md-0">
+
+                    <div class="form-group">
+                        <label asp-for="Employee.JobAssignmentId" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-circle-user"></i>
+                            </span>
+                        @if (Model.isRetired)
+                        {
+                            <select asp-for="Employee.JobAssignmentId" asp-items="Model.JobAssignments" class="form-control" id="jobAssignment" disabled>
+                                <option value="">-- Select Position --</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select asp-for="Employee.JobAssignmentId" asp-items="Model.JobAssignments" class="form-control" id="jobAssignment">
+                                <option value="">-- Select Position --</option>
+                            </select>
+                        }
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-caret-down"></i>
+                            </span>
+                        </div>
+
+                        <span asp-validation-for="Employee.JobAssignmentId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.SIN" class="control-label"></label>
+                        @if (Model.isRetired)
+                        {
+                            <input asp-for="Employee.SIN" class="form-control" readonly />
+                        }
+                        else
+                        {
+                            <input asp-for="Employee.SIN" class="form-control" />
+                        }
+
+                        <span asp-validation-for="Employee.SIN" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.SeniorityDate" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-calendar-days"></i>
+                            </span>
+                            @if (Model.isRetired)
+                            {
+                                <input asp-for="Employee.SeniorityDate" class="form-control" readonly />
+                            }
+                            else
+                            {
+                                <input asp-for="Employee.SeniorityDate" class="form-control" />
+                            }
+                        </div>
+                        <span asp-validation-for="Employee.SeniorityDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.WorkPhone" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-phone"></i>
+                            </span>
+                            @if (Model.isRetired)
+                            {
+                                <input asp-for="Employee.WorkPhone" class="form-control" readonly />
+                            }
+                            else
+                            {
+                                <input asp-for="Employee.WorkPhone" class="form-control" />
+                            }
+                        </div>
+                        <span asp-validation-for="Employee.WorkPhone" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.Email" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-envelope"></i>
+                            </span>
+                            <input asp-for="Employee.Email" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Employee.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Employee.DepartmentId" class="control-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-people-group"></i>
+                            </span>
+
+                        @if (Model.isRetired)
+                        {
+                            <select asp-for="Employee.DepartmentId" asp-items="Model.Departments" class="form-control" disabled>
+                                <option value="">-- Select Department --</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select asp-for="Employee.DepartmentId" asp-items="Model.Departments" class="form-control">
+                                <option value="">-- Select Department --</option>
+                            </select>
+                        }
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-caret-down"></i>
+                            </span>
+                        </div>
+                        <span asp-validation-for="Employee.DepartmentId" class="text-danger"></span>
+                    </div>
+
+
+                </div>
+
+                <div class="row justify-content-center mt-3">
+                    <div class="col-8 text-center">
+                        <div class="form-group">
+                            <input type="submit" value="Update" class="btn btn-primary w-50" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            console.log('Document is ready!');
+            $('#messageDiv').hide();
+            var isChanged = false;
+
+            $('input, select').focus(function () {
+                console.log('inside input or select');
+                $('#errorMessageRow').hide();
+            });
+
+            $('input, select').change(function () {
+                console.log('changed!');
+                isChanged = true;
+            });
+
+            $('#statusId').change(function () {
+                var statusId = $(this).val();
+                $('#retirementDateError').text('');
+                $('#terminationDateError').text('');
+
+                switch (statusId) {
+                    case '2':
+                        $('#terminationDateError').text('');
+                        $('#retirementDate').attr('required', true);
+                        $('#terminationDate').removeAttr('required').val('');
+
+                        break;
+                    case '3':
+                        $('#retirementDateError').text('');
+                        $('#terminationDate').attr('required', true);
+                        $('#retirementDate').removeAttr('required').val('');
+                        break;
+                    default:
+                        $('#retirementDate, #terminationDate').removeAttr('required').val('');
+                        break;
+                }
+            });
+
+            $('form').submit(function (event) {
+                console.log('Inside !');
+                var statusId = $('#statusId').val();
+                var retirementDate = $('#retirementDate').val();
+                var terminationDate = $('#terminationDate').val();
+
+                if (!isChanged) {
+                    event.preventDefault();
+                    $('#messageDiv').text('No changes have been made. Please make changes before submitting.');
+                    $('#messageDiv').show();
+                }
+
+                if ((statusId === '2' && !retirementDate) || (statusId === '3' && !terminationDate)) {
+                    event.preventDefault();
+                    if (statusId === '2' && !retirementDate) {
+                        $('#retirementDateError').text('Please enter a retirement date.');
+                    }
+                    if (statusId === '3' && !terminationDate) {
+                        $('#terminationDateError').text('Please enter a termination date.');
+                    }
+                }
+            });
+        });
+    </script>
+
+}

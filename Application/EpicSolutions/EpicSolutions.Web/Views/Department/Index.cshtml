@@ -1,0 +1,92 @@
+﻿@model IEnumerable<EpicSolutions.Model.Department>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center mt-3" id="messageRow">
+        @if (!string.IsNullOrEmpty((string)TempData["ErrorMessage"]))
+        {
+            <div class="col-6">
+                <div class="alert alert-danger role="alert" class="errorMessageContainer">
+                    @TempData["ErrorMessage"]
+                </div>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty((string)ViewBag.SuccessMessage))
+        {
+            <div class="alert alert-success" role="alert">
+                @ViewBag.SuccessMessage
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="col-6">
+                <div class="alert alert-danger " role="alert" class="errorMessageContainer">
+                    @ViewBag.ErrorMessage
+                </div>
+            </div>
+        }
+    </div>
+
+
+
+    <div class="col-md-8 justify-content-start mb-2">
+        <div>
+            <a asp-controller="Employee" asp-action="Dashboard" class="btn btn-outline-primary m-1 cardBoxShadow">Bask to Dashboard</a>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="table-dark"">
+                <tr>
+                    @* <th class="col-md-1 col-1 fs-5">No.</th> *@
+                    <th class="col-md-2 col-6 fs-5">Department</th>
+                    <th class="col-md-1 col-2"></th>
+                </tr>
+            </thead>
+            <tbody>
+            @* @{
+                int counter = 1;
+            } *@
+            @foreach (var department in Model)
+            {
+                    <tr>
+                       @*  <td class="col-md-1 col-1">@counter</td> *@
+                        <td class="col-md-2 col-6">@department.Name</td>
+                        <td class="col-md-1 col-2">
+                            <a href="@Url.Action("Edit", "Department", new { departmentId = department.Id })" class="btn btn-outline-primary m-1 cardBoxShadow w-100">Update</a>
+                           @*  <a asp-controller="Department" asp-action="Edit" asp-route-departmentId="@department.Id" class="btn btn-outline-primary m-1 cardBoxShadow w-100">Update</a> *@
+                        </td>
+                    </tr>
+               @*  counter++; *@
+            }
+            </tbody>
+        </table>
+    </div>
+   
+</div>
+
+
+
+
+<script src="~/lib/jquery/jquery.min.js"></script> 
+
+ <script type="text/javascript">
+    $(document).ready(function () {
+        setTimeout(function () {
+            $('#messageRow').hide(); 
+
+            console.log('messageRow has been hidden'); 
+
+        }, 5000); 
+
+    });
+</script>
+
