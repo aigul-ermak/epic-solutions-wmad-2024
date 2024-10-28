@@ -22,7 +22,7 @@ namespace DAL
 
         public DataAccess()
         {
-            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.Web.json", optional: true, reloadOnChange: true);
             connectionString = builder.Build().GetConnectionString("EpicSolutionConnStr");
         }
         #endregion
@@ -129,8 +129,8 @@ namespace DAL
 
         private SqlCommand CreateCommand(string cmdText, List<Parm>? parms, CommandType cmdType)
         {
-            SqlConnection conn = new(connectionString);
-            SqlCommand cmd = new(SQLCleaner(cmdText), conn) { CommandType = cmdType };
+            SqlConnection conn = new SqlConnection(connectionString);
+            SqlCommand cmd = new (SQLCleaner(cmdText), conn) { CommandType = cmdType };
 
             if (parms != null)
                 foreach (Parm p in parms)
