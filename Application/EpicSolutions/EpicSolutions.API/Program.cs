@@ -15,6 +15,16 @@ namespace EpicSolutions.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
+
+            builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.Api.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.Api.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
+            
+
             // Add services to the container.
 
             builder.Services.AddControllers();
