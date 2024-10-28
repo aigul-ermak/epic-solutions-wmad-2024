@@ -33,32 +33,21 @@
                         <span class="input-group-text">
                             <i class="fa-solid fa-user"></i>
                         </span>
-                        <input asp-for="EmployeeNumber" class="form-control" id="employeeNumberInput" />
+                        <input asp-for="EmployeeNumber" class="form-control" id="employeeNumberInput" placeholder="Employee Number is 00000011" />
                     </div>
                     <span asp-validation-for="EmployeeNumber" class="text-danger"></span>
-                </div>
-           @*  <div class="form-group">
-                <label asp-for="EmployeeNumber" class="control-label"></label>
-                <input asp-for="EmployeeNumber" class="form-control" id="employeeNumberInput" />
-                <span asp-validation-for="EmployeeNumber" class="text-danger"></span>
-            </div> *@
+                </div>          
                 <div class="form-group mt-3">
                     <label asp-for="Password" class="control-label"></label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fa-solid fa-lock"></i>
                         </span>
-                        @* <input asp-for="Password" type="password" class="form-control" id="passwordInput" /> *@
-                        <input asp-for="Password" type="password" class="form-control" id="passwordInput" />
+                        <input asp-for="Password" type="password" class="form-control" id="passwordInput" placeholder="Employee Password is E12345e!" />
                     </div>
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div> 
-
-           @*  <div class="form-group mt-3">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" id="passwordInput" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div> *@
+          
             <div class="form-group mt-5 text-center">
                 <input type="submit" value="Login" class="btn btn-primary w-50" />
             </div>
