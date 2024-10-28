@@ -15,6 +15,12 @@ namespace EpicSolutions.Web
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.Web.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.Web.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
             //Add session
             builder.Services.AddMemoryCache();
             builder.Services.AddSession(options =>
@@ -33,7 +39,7 @@ namespace EpicSolutions.Web
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-           
+
 
 
             var app = builder.Build();
