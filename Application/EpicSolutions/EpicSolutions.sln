@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpicSolutions.Web", "EpicSo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpicSolutions.API", "EpicSolutions.API\EpicSolutions.API.csproj", "{362CAF7D-5E87-4507-ABD4-8E74E63B0BE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicSolutions.MailService", "EpicSolutions.MailService\EpicSolutions.MailService.csproj", "{279F8315-5D5F-4B0E-993D-C0744CB9CBC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpicSolutions.MailService", "EpicSolutions.MailService\EpicSolutions.MailService.csproj", "{279F8315-5D5F-4B0E-993D-C0744CB9CBC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
